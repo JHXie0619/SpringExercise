@@ -13,12 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ByeAspect {
 	
+	long time = 0;
+	
 	@Pointcut("execution(* tw.com.hitrust.*.controller.*.create(..)) ||execution(* tw.com.hitrust.*.controller.*.delete(..))")
 	public void pointCut() {
 	}
 	
 	@Around("pointCut()")
 	public void doAround(ProceedingJoinPoint joinPoint) {
+		
+		time = System.currentTimeMillis();
 		log.info("bye,@Around");
 		try {
 			Object rtn = joinPoint.proceed();
@@ -26,6 +30,8 @@ public class ByeAspect {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		log.info("bye again,@Around");
+		
+		time = System.currentTimeMillis()-time;
+		log.info("bye again,@Around 執行時間={}毫秒",time);
 	}
 }
