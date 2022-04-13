@@ -16,9 +16,10 @@ public class HelloServiceImpl implements HelloService{
 	private HelloRepository helloRepository;
 	
 	@Override
-	public void create(HelloEntity helloEntity) {
+	public Integer create(HelloEntity helloEntity) {
 		log.info(helloEntity.toString());	//顯示log
-		helloRepository.save(helloEntity);
+		return helloRepository.save(helloEntity).getId();
+		
 	}
 
 	@Override
@@ -37,12 +38,13 @@ public class HelloServiceImpl implements HelloService{
 	}
 
 	@Override
-	public void update(HelloEntity helloEntity) {
+	public HelloEntity update(HelloEntity helloEntity) {
 		// TODO Auto-generated method stub
 		HelloEntity readEntity = helloRepository.findById(helloEntity.getId()).get();
 		readEntity.setEmpName(helloEntity.getEmpName());
 		readEntity.setEmpNumber(helloEntity.getEmpNumber());
 		helloRepository.save(readEntity);
-		
+		return  readEntity;
+		 
 	}
 }
