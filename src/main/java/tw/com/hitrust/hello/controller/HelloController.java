@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import tw.com.hitrust.hello.Service.HelloService;
+import tw.com.hitrust.hello.annotation.Hello;
 import tw.com.hitrust.hello.entity.HelloEntity;
 import tw.com.hitrust.hello.vo.ResHeaderVO;
 import tw.com.hitrust.hello.vo.ResponseVO;
 
 @RestController	//@RestController等於@Controller搭配@ResponseBody,建立RESTful Web Service的控制器
+@Slf4j
 public class HelloController {
 	
 	@Autowired
@@ -34,8 +37,14 @@ public class HelloController {
 	}
 	
 	@PostMapping("/Hello")
-	public Integer create(@RequestBody HelloEntity helloEntity) {
-		return helloService.create(helloEntity);
+	public ResponseEntity<ResponseVO<Integer>> create(@RequestBody HelloEntity helloEntity) {
+		ResponseVO<Integer> respVO = new ResponseVO<>();
+ 		ResHeaderVO resHeader = new ResHeaderVO();
+ 		resHeader.setMethodName(Thread.currentThread() .getStackTrace()[1].getMethodName());
+		respVO.setResHeader(resHeader);
+		respVO.setResBody(helloService.create(helloEntity));
+		log.info(Integer.toString(respVO.getResBody()));
+		return new ResponseEntity<ResponseVO<Integer>>(respVO,HttpStatus.OK);
 	}
 	
 	@PutMapping("/Hello")
@@ -49,9 +58,15 @@ public class HelloController {
 	}
 	
 	@DeleteMapping("/Hello")
-	public String delete(@RequestParam Integer id) {
+	@Hello
+	public ResponseEntity<ResponseVO<String>> delete(@RequestParam Integer id) {
+		ResponseVO<String> respVO = new ResponseVO<>();
+ 		ResHeaderVO resHeader = new ResHeaderVO();
+ 		resHeader.setMethodName(Thread.currentThread() .getStackTrace()[1].getMethodName());
+		respVO.setResHeader(resHeader);
 		helloService.delete(id);
-		return "delete Successed!";
+		respVO.setResBody("delete Successed");
+		return new ResponseEntity<ResponseVO<String>>(respVO,HttpStatus.OK);
 	}
 	
 

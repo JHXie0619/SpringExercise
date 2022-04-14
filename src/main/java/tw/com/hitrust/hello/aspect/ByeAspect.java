@@ -20,12 +20,13 @@ public class ByeAspect {
 	}
 	
 	@Around("pointCut()")
-	public void doAround(ProceedingJoinPoint joinPoint) {
+	public Object doAround(ProceedingJoinPoint joinPoint) {
 		
+		Object rtn = null;
 		time = System.currentTimeMillis();
 		log.info("bye,@Around");
 		try {
-			Object rtn = joinPoint.proceed();
+			rtn = joinPoint.proceed();
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,5 +34,6 @@ public class ByeAspect {
 		
 		time = System.currentTimeMillis()-time;
 		log.info("bye again,@Around 執行時間={}毫秒",time);
+		return rtn;
 	}
 }
