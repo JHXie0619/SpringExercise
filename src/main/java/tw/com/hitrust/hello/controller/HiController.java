@@ -45,7 +45,9 @@ public class HiController {
 	@RequestMapping(value = "/hi",method = RequestMethod.DELETE)
 	@ResponseBody
 	public String testD() {
-		return "testDELETE";
+		String limit = "hello" == null ? "0"
+				: (3 <= 2) ? "1" : "0";
+		return limit;
 	}
 	
 	@RequestMapping(value = "/hi",method = RequestMethod.GET)
